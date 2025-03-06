@@ -1,6 +1,6 @@
 // import { Context } from "vm";
-import { User } from "../models/index.js";
-import { signToken, AuthenticationError } from "../services/auth";
+import { User } from "../models/index.js"
+import { signToken, AuthenticationError } from "../services/auth.js";
 import { GraphQLError } from "graphql";
 
 // TODO: build the interfaces
@@ -38,7 +38,7 @@ interface Context {
 const resolvers = {
   Query: {
     // This is the query to return who you are currently logged in as
-    me: async (_parent: any, _args: {}, context: Context): Promise<User> => {
+    me: async (_parent: any, _args: {}, context: Context) => {
       if (context.user) {
         return await User.findOne({ _id: context.user._id }).populate(
           "savedBooks"

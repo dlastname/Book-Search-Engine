@@ -1,49 +1,53 @@
-import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-
+import { GraphQLError } from 'graphql';
 import dotenv from 'dotenv';
 dotenv.config();
-
-import { GraphQLError } from 'graphql'; //added 
 
 interface JwtPayload {
   _id: unknown;
   username: string;
-  email: string,
+  email: string;
 }
 
-export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
+/**
+ * Verifies a JWT token and returns the decoded user payload.
+ * Throws an AuthenticationError if the token is invalid or missing.
+ */
+export const authenticateToken = (token: string): JwtPayload => {
+  if (!token) {
+    throw new AuthenticationError('No token provided');
+  }
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
+  const secretKey = process.env.JWT_SECRET_KEY || '';
 
-    const secretKey = process.env.JWT_SECRET_KEY || '';
-
-    jwt.verify(token, secretKey, (err, user) => {
-      if (err) {
-        return res.sendStatus(403); // Forbidden
-      }
-
-      req.user = user as JwtPayload;
-      return next();
-    });
-  } else {
-    res.sendStatus(401); // Unauthorized
+  try {
+    const user = jwt.verify(token, secretKey) as JwtPayload;
+    return user;
+  } catch (err) {
+    throw new AuthenticationError('Invalid or expired token');
   }
 };
 
-export const signToken = (username: string, email: string, _id: unknown) => {
+/**
+ * Signs a JWT token with the provided user data.
+ */
+export const signToken = (username: string, email: string, _id: unknown): string => {
   const payload = { username, email, _id };
   const secretKey = process.env.JWT_SECRET_KEY || '';
 
   return jwt.sign(payload, secretKey, { expiresIn: '1h' });
 };
 
-// added AuthenticationError
+/**
+ * Custom GraphQL error for authentication failures.
+ */
 export class AuthenticationError extends GraphQLError {
   constructor(message: string) {
-    super(message, undefined, undefined, undefined, ['UNAUTHENTICATED']);
+    super(message, {
+      extensions: {
+        code: 'UNAUTHENTICATED',
+      },
+    });
     Object.defineProperty(this, 'name', { value: 'AuthenticationError' });
   }
-};
+}
