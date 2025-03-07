@@ -1,5 +1,7 @@
 # Front-End Refactor To-Do List
-
+# BUGS
+- [] when signing up it throws errors and doesn't redirect you, but it does still make the user... weird
+- [] Saving a book doesn't... so there are no saved books
 
 
 ## **File: `SignupForm.tsx`**
@@ -8,7 +10,7 @@
 
 ## **File: `LoginForm.tsx`**
 
-- [ ] Replace the `loginUser()` functionality (imported from the API file) with the `LOGIN_USER` mutation functionality.
+- [x] Replace the `loginUser()` functionality (imported from the API file) with the `LOGIN_USER` mutation functionality.
 
 
 # Done
