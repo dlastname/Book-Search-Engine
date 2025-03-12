@@ -1,3 +1,5 @@
+// Todo: fix this file... not sure we need this file. 22:29 coming back to it later
+
 import type { Request, Response } from 'express';
 // import user model
 import User from '../models/User.js';
