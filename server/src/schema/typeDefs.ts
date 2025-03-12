@@ -1,4 +1,5 @@
-const typeDefs = `
+import gql from "graphql-tag";
+const typeDefs = gql`
   type User {
       _id: ID!
       username: String!
@@ -28,7 +29,7 @@ const typeDefs = `
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
 
-    saveBook(bookId: String!, authors: [String]!, description: String, title: String!, image: String, link: String): User
+    saveBook(bookId: String!, authors: [String], description: String, title: String!, image: String, link: String): User
 
     login(email: String!, password: String!): Auth
 

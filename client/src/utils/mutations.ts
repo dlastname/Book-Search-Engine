@@ -28,7 +28,7 @@ export const ADD_USER = gql`
 export const SAVE_BOOK = gql`
   mutation saveBook(
     $bookId: String!
-    $authors: [String]!
+    $authors: [String]
     $description: String
     $title: String!
     $image: String

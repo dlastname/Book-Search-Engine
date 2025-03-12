@@ -3,7 +3,7 @@ import { User } from "../models/index.js"
 import { signToken, AuthenticationError } from "../services/auth.js";
 import { GraphQLError } from "graphql";
 
-// TODO: build the interfaces
+// xTODO: build the interfaces
 interface AddUserArgs {
   username: string;
   email: string;
@@ -51,6 +51,8 @@ const resolvers = {
   Mutation: {
     // Mutation to add a user
     addUser: async (_parent: any, args: AddUserArgs) => {
+      console.log(args);
+      
       const user = await User.create(args);
 
       if (!user) {
@@ -67,19 +69,20 @@ const resolvers = {
     saveBook: async (_parent: any, args: SaveBookArgs, context: Context) => {
       if (context.user) {
         // Create a new book object
-        const newBook = {
-          bookId: args.bookId,
-          authors: args.authors,
-          description: args.description,
-          title: args.title,
-          image: args.image,
-          link: args.link,
-        };
+        
+        // const newBook = {
+        //   bookId: args.bookId,
+        //   authors: args.authors,
+        //   description: args.description,
+        //   title: args.title,
+        //   image: args.image,
+        //   link: args.link,
+        // };
 
         // Update the user's savedBooks array
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: newBook } },
+          { $addToSet: { savedBooks: args } },
           { new: true, runValidators: true }
         ).populate("savedBooks");
 

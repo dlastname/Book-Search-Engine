@@ -57,10 +57,12 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
 
       // !ADDED: Replace with ADD_USER mutation
       const { data } = await addUser({
-        variables: { input: { ...userFormData } },
+        variables: { ...userFormData },
       });
 
       if (data?.addUser.token) {
+        console.log("Is this working? Add user token");
+
         Auth.login(data.addUser.token);
       }
     } catch (err) {
